@@ -118,38 +118,7 @@ function checkColor(el) {
   for(i in el.value) {
     arr.push(reg.exec(el.value[i]));
   } 
-
   el.value = '#' + arr.join('');
-}
-
-function wheelBorder(e) {
-  const borderTopInput = document.querySelector('#border-top');
-  const borderRightInput = document.querySelector('#border-right');
-  const borderBottomInput = document.querySelector('#border-bottom');
-  const borderLeftInput = document.querySelector('#border-left');
-
-  if(e.target.classList.contains('right')) {
-    e.deltaY < 0 ? values.borderRight++ : values.borderRight--;
-    preview.style.borderRight = `${values.borderRight}px ${values.borderStyle} ${values.borderColor}`;
-    borderRightInput.value = values.borderRight;      
-  } else if(e.target.classList.contains('top')) {
-    e.deltaY < 0 ? values.borderTop++ : values.borderTop--;
-    preview.style.borderTop = `${values.borderTop}px ${values.borderStyle} ${values.borderColor}`;
-    borderTopInput.value = values.borderTop;      
-  } else if(e.target.classList.contains('bottom')) {
-    e.deltaY < 0 ? values.borderBottom++ : values.borderBottom--;
-    preview.style.borderBottom = `${values.borderBottom}px ${values.borderStyle} ${values.borderColor}`;
-    borderBottomInput.value = values.borderBottom;      
-  } else if(e.target.classList.contains('left')) {
-    e.deltaY < 0 ? values.borderLeft++ : values.borderLeft--;
-    preview.style.borderLeft = `${values.borderLeft}px ${values.borderStyle} ${values.borderColor}`;
-    borderLeftInput.value = values.borderLeft;           
-  }
-
-  if(values.borderTop < 0) { values.borderTop = 0; borderTopInput.value = 0; }
-  if(values.borderRight < 0) { values.borderRight = 0; borderRightInput.value = 0; }
-  if(values.borderBottom < 0) { values.borderBottom = 0; borderBottomInput.value = 0; }
-  if(values.borderLeft < 0) { values.borderLeft = 0; borderLeftInput.value = 0; }
 }
 
 function output() {
@@ -182,15 +151,9 @@ function output() {
 const btn = document.querySelector('.generate-btn');
 btn.addEventListener('click', output);
 
-const indicators = document.querySelectorAll('.indicator');
+const inputContainer = document.querySelector('.input-container');
 
-for(let i = 0; i < indicators.length; i++) {
-  indicators[i].addEventListener('wheel', wheelBorder);
-}
-
-const container = document.querySelector('.input-container');
-
-container.addEventListener('keydown', (e) => {
+inputContainer.addEventListener('keydown', (e) => {
   if(e.target.classList.contains('range')) {
     rangeInput("keydown", e.target);
   } else {
@@ -198,7 +161,7 @@ container.addEventListener('keydown', (e) => {
   }
 })
 
-container.addEventListener('mouseover', (e) => {
+inputContainer.addEventListener('mouseover', (e) => {
   if(e.target.classList.contains('range')) {
     rangeInput("mousedown", e.target);
     rangeInput("mousemove", e.target);
@@ -207,7 +170,7 @@ container.addEventListener('mouseover', (e) => {
   }
 })
 
-container.addEventListener('touchstart', (e) => {
+inputContainer.addEventListener('touchstart', (e) => {
   if(e.target.classList.contains('range')) {
     rangeInput("touchstart", e.target);
     rangeInput("touchmove", e.target);
@@ -217,12 +180,7 @@ container.addEventListener('touchstart', (e) => {
   }
 })
 
-preview.addEventListener('dblclick', () => {
-  body.classList.toggle('scroll');
-  previewContainer.classList.toggle('scroll');
-});
-
-//moving element
+//dragging the element
 
 const previewContainer = document.querySelector('.preview-container');
 let offset = [0,0];
@@ -244,6 +202,8 @@ previewContainer.addEventListener('mousemove', (e) => {
     preview.style.top  = (e.clientY + offset[1]) + 'px';
   }
 });
+
+//touch dragging
 
 function touchHandler(e) {
   const touch = e.changedTouches[0];
